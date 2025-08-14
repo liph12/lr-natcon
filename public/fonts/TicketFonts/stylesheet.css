@@ -1,0 +1,38 @@
+@font-face {
+    font-family: 'Krungthep';
+    src: url('Krungthep.woff2') format('woff2'),
+        url('Krungthep.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mordova';
+    src: url('MordovaRegular.woff2') format('woff2'),
+        url('MordovaRegular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'LS Harsey Sans One';
+    src: url('LSHarseySans-One.woff2') format('woff2'),
+        url('LSHarseySans-One.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ireene';
+    src: url('Ireene-Bold.woff2') format('woff2'),
+        url('Ireene-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+

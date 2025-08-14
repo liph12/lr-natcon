@@ -1,0 +1,7 @@
+@font-face {
+    font-family: 'Ireene-Bold';
+    src: url('../fonts/Ireene-Bold.woff2') format('woff2'),
+        url('../fonts/Ireene-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
