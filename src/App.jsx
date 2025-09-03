@@ -42,40 +42,21 @@ function App() {
       lightWarning: {},
     },
   });
+
   return (
     <ThemeProvider theme={theme}>
       <Routes>
-        <Route path="/natcon-reg-2024" element={<Registration />} />
+        <Route path="/natcon-reg-2025" element={<Registration />} />
         <Route path="/view-awardees" element={<ViewAwardees />} />
         <Route path="/qr-scanner" element={<QRScanner />} />
         <Route path="/invitation" element={<Invitation />} />
         <Route path="/invitation-generator" element={<InvitationCard />} />
         <Route path="/id-generator" element={<NatconIDGenerator />} />
         <Route path="/ticket-generator" element={<TicketGenerator />} />
-        <Route path="/ticket" element={<TicketDrawer/>} />
+        <Route path="/ticket" element={<TicketDrawer />} />
       </Routes>
     </ThemeProvider>
   );
 }
 
 export default App;
-
-// Marilyn & Percival Laranjo --
-// Princess Rose Esposo --
-// Marc Jefferson Licayan --
-// Morena Legaspi-Banigan-
-// Mary Anne Tesiorna--
-// Maria Teresa Aquino--
-// Glaiza & Jerome Lantaca-
-// Marilou Goc-ong--
-// Lehlet Arendain--
-
-// lenlaranjo@gmail.com--
-// filipinohomesmanilaph@gmail.com--
-// marc.leuteriorealty@gmail.com--
-// klengbanigan101@yahoo.com--
-// ryefortalejo88@gmail.com--
-// teredan_3774@yahoo.com--
-// reandoyunyun@gmail.com--
-// mutz021984@gmail.com--
-// arendainlehlet23@gmail.com--

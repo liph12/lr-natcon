@@ -334,8 +334,8 @@ const Invitation = () => {
         };
       });
 
-      const tmpQualifiers = [...newQualifiers, ...offsetQualifiers];
-      const updatedQualifiers = tmpQualifiers.map((q, idx) => {
+      // const tmpQualifiers = [...newQualifiers];
+      const updatedQualifiers = newQualifiers.map((q, idx) => {
         return {
           ...q,
           id: idx + 1,

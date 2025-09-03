@@ -48,7 +48,7 @@ export default function InvitationCardFinal({ awardee, setCanvas }) {
       awardee?.team?.toUpperCase() ??
       `${formatFirstName(firstName)} ${lastName}`.toUpperCase();
     const img = new Image();
-    img.src = awardee?.team === null ? invitationImg : invitationTeamImg; // Load the background image from the provided URL
+    img.src = awardee?.team === null ? invitationImg : invitationTeamImg;
 
     const loadFont = async () => {
       const font = new FontFace("Ireene-Bold", "url(/fonts/Ireene-Bold.woff2)");

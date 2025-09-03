@@ -1,46 +1,40 @@
-import "primereact/resources/themes/saga-blue/theme.css"; // Import PrimeReact theme
-import "primereact/resources/primereact.min.css"; // Import PrimeReact core styles
-import "primeicons/primeicons.css"; // Import PrimeIcons
+import "primereact/resources/themes/saga-blue/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
 import React, { useState, useRef } from "react";
 import { InputTextarea } from "primereact/inputtextarea";
 import { FloatLabel } from "primereact/floatlabel";
-import { Button } from "primereact/button"; // Import PrimeReact Button
-import { DataTable } from "primereact/datatable"; // Import PrimeReact DataTable
-import { Column } from "primereact/column"; // Import PrimeReact Column
-import "../../public/fonts/stylesheet.css"; // Your custom styles
+import { Button } from "primereact/button";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import "../../public/fonts/stylesheet.css";
 
 export default function InvitationCard() {
   const [value, setValue] = useState("");
   const [imageList, setImageList] = useState([]);
-  const [namesData, setNamesData] = useState([]); // State to hold data for DataTable
+  const [namesData, setNamesData] = useState([]);
   const canvasRef = useRef(null);
 
-  // Function to handle button click
   const handleGenerateClick = () => {
-    // Split the input by new lines to get each name entry
     const names = value.split("\n").filter((name) => name.trim() !== "");
 
-    // Clear previous images and reset the table data
     setImageList([]);
     setNamesData(names.map((name) => ({ name, status: "In Progress" })));
 
-    // Iterate over each name and create an invitation for it
     names.forEach((name, index) => {
       drawInvitation(name, index);
     });
   };
 
-  // Function to draw the invitation
   const drawInvitation = (name, index) => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
     let fullName = `${name}`.toUpperCase();
     const img = new Image();
-    img.crossOrigin = "Anonymous"; // Handle CORS for external images
+    img.crossOrigin = "Anonymous";
     img.src =
-      "https://filipinohomes123.s3.ap-southeast-1.amazonaws.com/lr-web/invitation_new.jpg"; // Load the background image from the provided URL
+      "https://filipinohomes123.s3.ap-southeast-1.amazonaws.com/lr-web/invitation_new.jpg";
 
-    // Load the font using FontFace API
     const loadFont = async () => {
       const font = new FontFace("Ireene-Bold", "url(/fonts/Ireene-Bold.woff2)");
       await font.load();
@@ -49,18 +43,15 @@ export default function InvitationCard() {
     };
 
     img.onload = async () => {
-      // Ensure font is loaded before drawing
       await loadFont();
 
-      context.clearRect(0, 0, canvas.width, canvas.height); // Clear previous drawings
-      context.drawImage(img, 0, 0, canvas.width, canvas.height); // Draw the background image
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-      let fontSize = 180; // Start with initial font size
-      let x; // Declare x-coordinate outside loop to use it later
+      let fontSize = 180;
+      let x;
 
-      // Adjust font size until x is greater than 500
       do {
-        // Set font properties dynamically
         context.font = `bold ${fontSize}px Ireene-Bold`;
         context.textAlign = "left"; // Set text alignment to 'left' to position based on starting x
         context.textBaseline = "middle"; // Align text vertically to the middle

@@ -81,6 +81,7 @@ const Registration = () => {
 
   const canvasRef = useRef(null);
   const audio = new Audio(bgAudioTrack);
+  const currentYear = new Date().getFullYear();
 
   const playAudioTrack = () => {
     audio.play();
@@ -154,25 +155,30 @@ const Registration = () => {
       const formData = new FormData();
 
       fields.combined = localStorage.getItem("combined") === "1" ? "yes" : "no";
-
-      formData.append("registration_id", fields.registration_id);
-      formData.append("first_name", fields.first_name);
-      formData.append("last_name", fields.last_name);
-      formData.append("birthday", fields.birthday);
-      formData.append("gender", fields.gender);
-      formData.append("photo", fields.photo);
-      formData.append("first_name_", fields.first_name_);
-      formData.append("last_name_", fields.last_name_);
-      formData.append("birthday_", fields.birthday_);
-      formData.append("gender_", fields.gender_);
-      formData.append("photo_", fields.photo_);
-      formData.append("email", fields.email);
-      formData.append("phone", fields.phone);
-      formData.append("team", fields.team);
-      formData.append("combined", fields.combined);
-      formData.append("guest_of", fields.guest_of);
       formData.append("guest", guest);
-      formData.append("polo_shirt_size", fields.polo_shirt_size);
+
+      Object.keys(fields).forEach((key) => {
+        formData.append(key, fields[key]);
+      });
+
+      // formData.append("registration_id", fields.registration_id);
+      // formData.append("first_name", fields.first_name);
+      // formData.append("last_name", fields.last_name);
+      // formData.append("birthday", fields.birthday);
+      // formData.append("gender", fields.gender);
+      // formData.append("photo", fields.photo);
+      // formData.append("first_name_", fields.first_name_);
+      // formData.append("last_name_", fields.last_name_);
+      // formData.append("birthday_", fields.birthday_);
+      // formData.append("gender_", fields.gender_);
+      // formData.append("photo_", fields.photo_);
+      // formData.append("email", fields.email);
+      // formData.append("phone", fields.phone);
+      // formData.append("team", fields.team);
+      // formData.append("combined", fields.combined);
+      // formData.append("guest_of", fields.guest_of);
+      // formData.append("guest", guest);
+      // formData.append("polo_shirt_size", fields.polo_shirt_size);
 
       setLoadingSubmit(true);
       clearErrors();
@@ -401,7 +407,7 @@ const Registration = () => {
         <Card sx={{ maxWidth: "80vw", margin: lg ? 10 : 2 }}>
           <CardMedia
             component="img"
-            alt="NATON 2024 Background"
+            alt={`NATON ${currentYear} Background`}
             height="auto"
             image={NATCONBackGround}
           />
@@ -417,7 +423,7 @@ const Registration = () => {
                         component="div"
                         sx={{ marginBottom: 2 }}
                       >
-                        REGISTER TO NATCON 2024
+                        REGISTER TO NATCON {currentYear}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         Registration ID:{" "}
@@ -715,7 +721,7 @@ const Registration = () => {
                             color="warning"
                           />
                         }
-                        label="By checking this, you are confirming to attend the NATCON 2024."
+                        label={`By checking this, you are confirming to attend the NATCON ${currentYear}`}
                       />
                     </FormGroup>
                   </CardActions>
@@ -745,11 +751,11 @@ const Registration = () => {
                       component="div"
                       sx={{ marginBottom: 1, fontWeight: "bold" }}
                     >
-                      NATIONAL REAL ESTATE CONVENTION 2024
+                      NATIONAL REAL ESTATE CONVENTION {currentYear}
                     </Typography>
                     <Typography variant="h6" sx={{ marginBottom: 3 }}>
                       Inviting the BEST of the BEST in Philippine Real Estate
-                      2024 into ONE GRAND NATIONAL CONVENTION
+                      {currentYear} into ONE GRAND NATIONAL CONVENTION
                     </Typography>
                     <Divider sx={{ my: 2 }} />
                     <Typography
@@ -758,7 +764,7 @@ const Registration = () => {
                       component="div"
                       sx={{ marginBottom: 1, fontWeight: "bold" }}
                     >
-                      About NATCON 2024
+                      About NATCON {currentYear}
                     </Typography>
                     <Typography paragraph sx={{ marginBottom: 3 }}>
                       A 2-Day grand gathering of Filipino Homes awardees from
@@ -766,14 +772,14 @@ const Registration = () => {
                       <b>NUSTAR Resort & Casino Cebu.</b>
                       <br />
                       <br />
-                      <b>DAY 1 - October 20, 2024</b>(Sunday) Conference and
-                      Welcome Party. Doors will open at <b>10:30 A.M.</b>{" "}
-                      (Please take your early lunch). <br />
+                      <b>DAY 1 - October 19, {currentYear}</b>(Sunday)
+                      Conference and Welcome Party. Doors will open at{" "}
+                      <b>10:30 A.M.</b> (Please take your early lunch). <br />
                       <b>ATTIRE:</b> FH Polo Shirt (To be provided)
                       <br />
                       <br />
-                      <b>DAY 2 - October 21, 2024</b>(Monday) National Awards
-                      Night. The Pictorial Starts at <b>10:30 A.M.</b>
+                      <b>DAY 2 - October 20, {currentYear}</b>(Monday) National
+                      Awards Night. The Pictorial Starts at <b>10:30 A.M.</b>
                       <br />
                       <b>ATTIRE:</b> <br />
                       MEN - Formal Barong <br />
@@ -870,7 +876,7 @@ const Registration = () => {
         color="text.secondary"
         sx={{ marginBottom: 5, textAlign: "center" }}
       >
-        LR NATCON 2024 | &copy; All Rights Reserved
+        LR NATCON {currentYear} | &copy; All Rights Reserved
       </Typography>
     </Box>
   );
