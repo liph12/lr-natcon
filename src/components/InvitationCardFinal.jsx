@@ -1,14 +1,13 @@
+import { useRef, useEffect, useState } from "react";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
-import { useState, useRef, useEffect } from "react";
 import "../../public/fonts/stylesheet.css";
-import invitationImg from "../assets/images/invitation_new.jpg";
+import invitationImg from "../assets/images/invitation_2025.png";
 import invitationTeamImg from "../assets/images/invitation_team.png";
 
 export default function InvitationCardFinal({ awardee, setCanvas }) {
   const canvasRef = useRef(null);
-  const { firstName, lastName, email } = awardee;
 
   const formatFirstName = (str) => {
     let formattedStr = str;
@@ -46,52 +45,168 @@ export default function InvitationCardFinal({ awardee, setCanvas }) {
     const context = canvas.getContext("2d");
     let fullName =
       awardee?.team?.toUpperCase() ??
-      `${formatFirstName(firstName)} ${lastName}`.toUpperCase();
-    const img = new Image();
+      `${formatFirstName(awardee.firstName)} ${awardee.lastName}`.toUpperCase();
+    const img = new window.Image();
     img.src = awardee?.team === null ? invitationImg : invitationTeamImg;
 
     const loadFont = async () => {
-      const font = new FontFace("Ireene-Bold", "url(/fonts/Ireene-Bold.woff2)");
-      await font.load();
-      document.fonts.add(font);
-      return font;
+      const fontBold = new window.FontFace(
+        "Gempire",
+        "url(/fonts/Gempire-Bold.woff)",
+        { weight: "bold" }
+      );
+      const fontRegular = new window.FontFace(
+        "Gempire",
+        "url(/fonts/Gempire-Regular.woff)",
+        { weight: "normal" }
+      );
+      await fontBold.load();
+      await fontRegular.load();
+      document.fonts.add(fontBold);
+      document.fonts.add(fontRegular);
+      return fontBold;
     };
 
     img.onload = async () => {
       await loadFont();
-
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-      let fontSize = 180; // Start with initial font size
-      let x; // Declare x-coordinate outside loop to use it later
+      // Declare shared variables for all logic branches
+      let fontSize = 150;
+      let textWidth, x, yName, ySubtitle;
+      let isTwoLine = false;
 
-      // Adjust font size until x is greater than 500
-      do {
-        // Set font properties dynamically
-        context.font = `bold ${fontSize}px Ireene-Bold`;
-        context.textAlign = "left"; // Set text alignment to 'left' to position based on starting x
-        context.textBaseline = "middle"; // Align text vertically to the middle
+      // --- NEW LOGIC FOR 'AND' NAMES ---
+      let andMatch = fullName.match(/\bAND\b/i);
+      if (andMatch) {
+        // Remove 'AND' and split names
+        let [name1, name2] = fullName.split(/\bAND\b/i).map((s) => s.trim());
+        // Check if name1 has two words
+        if (name1.split(" ").length > 1) {
+          // name1 (line 1), 'AND name2' (line 2)
+          context.shadowColor = "rgba(0, 0, 0, 0.5)";
+          context.shadowOffsetX = 10;
+          context.shadowOffsetY = 10;
+          context.shadowBlur = 20;
+          context.fillStyle = "#EFC124";
+          // Adjust font size for both lines independently
+          let fontSize1 = fontSize;
+          let fontSize2 = fontSize;
+          let name1Width, xName1;
+          do {
+            context.font = `bold ${fontSize1}px Gempire`;
+            name1Width = context.measureText(name1).width;
+            xName1 = 2450 - name1Width;
+            if (name1Width > 2200) fontSize1 -= 5;
+          } while (name1Width > 2200 && fontSize1 > 20);
+          let y1 = 850;
+          context.font = `bold ${fontSize1}px Gempire`;
+          context.fillText(name1, xName1, y1);
 
-        // Calculate text width
-        const textWidth = context.measureText(fullName).width;
-
-        // Calculate the x-coordinate so that the end of the text aligns with 2300
-        x = 2300 - textWidth;
-
-        // Decrease font size if x is less than 500
-        if (x < 180) {
-          fontSize -= 5; // Adjust this value to control the decrement steps
+          // 'AND name2' on next line, adjust font size if needed
+          let andName2 = `AND ${name2}`;
+          let name2Width, xName2;
+          do {
+            context.font = `bold ${fontSize2}px Gempire`;
+            name2Width = context.measureText(andName2).width;
+            xName2 = 2450 - name2Width;
+            if (name2Width > 2200) fontSize2 -= 5;
+          } while (name2Width > 2200 && fontSize2 > 20);
+          let y2 = y1 + fontSize2 + 10;
+          context.font = `bold ${fontSize2}px Gempire`;
+          context.fillText(andName2, xName2, y2);
+          ySubtitle = y2 + 100;
+        } else {
+          // name1 AND (line 1), name2 (line 2)
+          context.shadowColor = "rgba(0, 0, 0, 0.5)";
+          context.shadowOffsetX = 10;
+          context.shadowOffsetY = 10;
+          context.shadowBlur = 20;
+          context.fillStyle = "#EFC124";
+          // Adjust font size for both lines
+          let name1Width, andWidth, name2Width, xName1, xAnd, xName2;
+          context.font = `bold ${fontSize}px Gempire`;
+          name1Width = context.measureText(name1).width;
+          andWidth = context.measureText("AND").width;
+          xName1 = 1975 - name1Width;
+          let y1 = 850;
+          context.fillText(name1, xName1, y1);
+          // 'AND' on same line, right after name1
+          context.font = `bold ${fontSize}px Gempire`;
+          xAnd = xName1 + name1Width + 20;
+          context.fillText("AND", xAnd, y1);
+          // name2 on next line
+          context.font = `bold ${fontSize}px Gempire`;
+          name2Width = context.measureText(name2).width;
+          xName2 = 2450 - name2Width;
+          let y2 = y1 + fontSize + 10;
+          context.fillText(name2, xName2, y2);
+          ySubtitle = y2 + 100;
         }
-      } while (x < 180 && fontSize > 20); // Continue adjusting until x is greater than 500 or font size is reasonable
+      } else {
+        // --- EXISTING LOGIC ---
+        // Calculate textWidth and x for fallback logic
+        do {
+          context.font = `bold ${fontSize}px Gempire`;
+          context.textAlign = "left";
+          context.textBaseline = "middle";
+          textWidth = context.measureText(fullName).width;
+          x = 2450 - textWidth;
+          if (x < 180) {
+            fontSize -= 5;
+          }
+        } while (x < 180 && fontSize > 20);
+        if (textWidth > 1800) {
+          isTwoLine = true;
+          // Draw first name on one line, last name on the next
+          context.shadowColor = "rgba(0, 0, 0, 0.5)";
+          context.shadowOffsetX = 10;
+          context.shadowOffsetY = 10;
+          context.shadowBlur = 20;
+          context.fillStyle = "#EFC124";
+          // Center both lines
+          const firstName =
+            awardee?.team?.toUpperCase() ??
+            formatFirstName(awardee.firstName).toUpperCase();
+          const lastName = awardee?.team?.toUpperCase()
+            ? ""
+            : awardee.lastName.toUpperCase();
+          const firstNameWidth = context.measureText(firstName).width;
+          const lastNameWidth = context.measureText(lastName).width;
+          const xFirst = 2450 - firstNameWidth;
+          const xLast = 2450 - lastNameWidth;
+          yName = 850;
+          context.fillText(firstName, xFirst, yName);
+          if (!awardee?.team) {
+            yName += fontSize + 10;
+            context.fillText(lastName, xLast, yName);
+          }
+          ySubtitle = yName + 100;
+        } else {
+          // Single line as before
+          context.shadowColor = "rgba(0, 0, 0, 0.5)";
+          context.shadowOffsetX = 10;
+          context.shadowOffsetY = 10;
+          context.shadowBlur = 20;
+          context.fillStyle = "#EFC124";
+          context.fillText(fullName, x, 890);
+          ySubtitle = 850 + fontSize;
+        }
+      }
 
-      // Set up text shadow properties
-      context.shadowColor = "rgba(0, 0, 0, 0.5)"; // Shadow color with transparency
-      context.shadowOffsetX = 10; // Horizontal shadow offset
-      context.shadowOffsetY = 10; // Vertical shadow offset
-      context.shadowBlur = 20; // Shadow blur
-      context.fillStyle = "#EFC124";
-      context.fillText(fullName, x, 600);
+      // Draw 'VIP | TOP AGENT' below the name (dynamic y)
+      const subtitle = "VIP | TOP AGENT";
+      context.font = `normal 90px Gempire`;
+      context.shadowColor = "rgba(0,0,0,0.4)";
+      context.shadowOffsetX = 4;
+      context.shadowOffsetY = 4;
+      context.shadowBlur = 10;
+      context.fillStyle = "#fff";
+      // Center the subtitle under the name
+      const subtitleWidth = context.measureText(subtitle).width;
+      const subtitleX = 2450 - subtitleWidth;
+      context.fillText(subtitle, subtitleX, ySubtitle);
 
       setCanvas(canvas);
     };
