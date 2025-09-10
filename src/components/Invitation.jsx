@@ -12,208 +12,8 @@ import { useEffect, useState } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import NATCONBackGround from "../assets/images/natcon_rect_bg.jpg";
 import AxiosInstance from "../config/AxiosInstance";
-import InvitationCardFinal from "./InvitationCardFinal";
-
-const offsetQualifiers = [
-  {
-    id: 107204714,
-    firstName: "Marilyn and Percival",
-    lastName: "Laranjo",
-    mobile: "+639356625281",
-    email: "lenlaranjo@gmail.com",
-    onUpdate: false,
-  },
-  {
-    id: 626194337,
-    firstName: "Princess Rose",
-    lastName: "Esposo",
-    mobile: "+6309762000344",
-    email: "filipinohomesmanilaph@gmail.com",
-    onUpdate: false,
-  },
-  {
-    id: 407140402,
-    firstName: "Marc Jefferson",
-    lastName: "Licayan",
-    mobile: "+639367435777",
-    email: "marc.leuteriorealty@gmail.com",
-    onUpdate: false,
-  },
-  {
-    id: 509184600,
-    firstName: "Morena",
-    lastName: "Banigan",
-    mobile: "+639178915628",
-    email: "klengbanigan101@yahoo.com",
-    onUpdate: false,
-  },
-  {
-    id: 831160619,
-    firstName: "Mary Anne",
-    lastName: "Tesiorna",
-    mobile: "+639291044787",
-    email: "ryefortalejo88@gmail.com",
-    onUpdate: false,
-  },
-  {
-    id: 1125185649,
-    firstName: "Maria Teresa",
-    lastName: "Aquino",
-    mobile: "+639190028895",
-    email: "teredan_3774@yahoo.com",
-    onUpdate: false,
-  },
-  {
-    id: 624233522,
-    firstName: "Glaiza and Jerome",
-    lastName: "Lantaca",
-    mobile: "+6309564739372",
-    email: "reandoyunyun@gmail.com",
-    onUpdate: false,
-  },
-  {
-    id: 312172156,
-    firstName: "Marilou",
-    lastName: "Goc-ong",
-    mobile: "+639260850612",
-    email: "mutz021984@gmail.com",
-    onUpdate: false,
-  },
-  {
-    id: 620233211,
-    firstName: "Lehlet",
-    lastName: "Arendain",
-    mobile: "+639387827658",
-    email: "arendainlehlet23@gmail.com",
-    onUpdate: false,
-  },
-  {
-    id: 1203142920,
-    firstName: "Marjorie and Gilbert",
-    lastName: "Monecillo",
-    team: "Filipino Homes VIP",
-    mobile: "+639171209248",
-    email: "gilbertmonecillo28@gmail.com",
-    onUpdate: false,
-  },
-  {
-    id: 711180725,
-    firstName: "Ada Mae and Jay Neil",
-    lastName: "Roiles",
-    team: "Red Diamonds",
-    mobile: "+639773907922",
-    email: "jnselior@gmail.com",
-    onUpdate: false,
-  },
-  {
-    id: 608173132,
-    firstName: "Grace and Mike Noel III",
-    lastName: "Chin",
-    team: "Chin Dynasty",
-    mobile: " +639177900891",
-    email: "gtomtomchin@yahoo.com",
-    onUpdate: false,
-  },
-  {
-    id: 805144908,
-    firstName: "Rebecca and Lyndon",
-    lastName: "Quiao",
-    team: "BEX Team",
-    mobile: "+639985673503",
-    email: "bexquiao@gmail.com",
-    onUpdate: false,
-  },
-  {
-    id: 808113616,
-    firstName: "Monnien and Teody",
-    lastName: "Embrado",
-    team: "LR Alliance",
-    mobile: "+639323717379",
-    email: "jude.embrado@gmail.com",
-    onUpdate: false,
-  },
-  {
-    id: 1230114337,
-    firstName: "Jenaido",
-    lastName: "Quijano",
-    team: "Dreamchasers",
-    mobile: "+639165983608",
-    email: "centralvisayasproperty@gmail.com",
-    onUpdate: false,
-  },
-  {
-    id: 819114522,
-    firstName: "Lanie Rea and Marlou Angelo",
-    lastName: "Hinay",
-    team: "Team Royalties",
-    mobile: "+639173188858",
-    email: "cebuproperties4sale@gmail.com",
-    onUpdate: false,
-  },
-  {
-    id: 813112914,
-    firstName: "Azela and Marlo",
-    lastName: "Honor",
-    team: "Team A",
-    mobile: "+639171442234",
-    email: "honor.azela@gmail.com",
-    onUpdate: false,
-  },
-  {
-    id: 813115049,
-    firstName: "Melissa and Mark Anthony",
-    lastName: "Villarubia",
-    team: "Team X Factor",
-    mobile: "+639150012431",
-    email: "cebubestprojects@gmail.com",
-    onUpdate: false,
-  },
-  {
-    id: 320143754,
-    firstName: "Jeaneth and Wire",
-    lastName: "Estose",
-    team: "Wire Toppers",
-    mobile: "+639199909642",
-    email: "wireestose1971@gmail.com",
-    onUpdate: false,
-  },
-  {
-    id: 320143754,
-    firstName: "Jeaneth and Wire",
-    lastName: "Estose",
-    team: "Wire Toppers",
-    mobile: "+639199909642",
-    email: "wireestose1971@gmail.com",
-    onUpdate: false,
-  },
-  {
-    id: 1118153924,
-    firstName: "Leslie And Fredo Jr.",
-    lastName: "Gonzaga",
-    team: "Leslie And Fredo Gonzaga Jr.",
-    mobile: "+639498450725",
-    email: "leslie_generale87@yahoo.com",
-    onUpdate: false,
-  },
-  {
-    id: 103145013,
-    firstName: "Geoffrey Lidon and Jo Ann Cabrera",
-    lastName: "Lidon",
-    team: "Starshooters",
-    mobile: "+639176246283",
-    email: "geoffrey.lidon@gmail.com",
-    onUpdate: false,
-  },
-  {
-    id: 1204135628,
-    firstName: "Angela Renee And Paul Josef",
-    lastName: "Abarquez",
-    team: "Starlight Team",
-    mobile: "+639222741170",
-    email: "abarquezangela@gmail.com",
-    onUpdate: false,
-  },
-];
+import InvitationNew from "./InvitationNew";
+import data from "../data/data.json";
 
 const Invitation = () => {
   const theme = useTheme();
@@ -233,11 +33,6 @@ const Invitation = () => {
       headerName: "Email",
       width: 200,
     },
-    // {
-    //   field: "phone",
-    //   headerName: "Mobile",
-    //   width: 150,
-    // },
     {
       field: "action",
       headerName: "Action",
@@ -264,55 +59,38 @@ const Invitation = () => {
     },
   ];
 
-  const findAndProcessInvitation = (email, invite) => {
-    const index = loadingInvitations.findIndex((e) => e.email === email);
-    const sentInvitation = structuredClone(loadingInvitations[index]);
+  function handleSendInvitation(row) {
+    setAwardee(row);
+  }
 
-    sentInvitation.invited = invite;
+  const initQualifiers = async () => {
+    const qualifiersData = data.map((q, i) => {
+      const fullName = `${q.firstName} ${q.lastName}`;
 
-    const updatedInvitationStatus = loadingInvitations.slice();
-    updatedInvitationStatus[index] = sentInvitation;
-    setLoadingInvitations(updatedInvitationStatus);
-  };
-
-  const formatStrUpperFirstChar = (str) => {
-    let strToLower = str.toLowerCase();
-    let strArray = strToLower.split(" ");
-    let actualStr = "";
-
-    strArray.forEach((chars, idx) => {
-      let subStr = chars[0].toUpperCase();
-
-      for (let i in chars) {
-        if (i > 0) {
-          subStr += chars[i];
-        }
-      }
-
-      actualStr += `${subStr}`;
-
-      if (idx < strArray.length - 1) {
-        actualStr += " ";
-      }
+      return {
+        id: i,
+        firstName: q.firstName,
+        lastName: q.lastName,
+        fullName: fullName,
+        email: q.email,
+        onUpdate: false,
+      };
     });
 
-    return actualStr;
+    const response = await AxiosInstance.get(`get-invited-awardees`);
+
+    if (response.status === 200) {
+      const currentInvitedAwardees = response.data;
+      const invitations = createNewQualifiers(
+        qualifiersData,
+        currentInvitedAwardees
+      );
+
+      setOnProgres(false);
+      setRows(qualifiersData);
+      setLoadingInvitations(invitations);
+    }
   };
-
-  async function handleSendInvitation(row) {
-    const { email, firstName, lastName, id } = row;
-    const team = row?.team ?? null;
-
-    const displayAwardee = {
-      id: id,
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      team: team,
-    };
-
-    setAwardee(displayAwardee);
-  }
 
   const fetchQualifiers = async () => {
     const response = await fetch(
@@ -393,7 +171,7 @@ const Invitation = () => {
         name: firstName,
         last: lastName,
         email: email,
-        combined: name.includes(" and "),
+        combined: name.includes(" & "),
       };
 
       updateInvitationProgress(true);
@@ -434,7 +212,7 @@ const Invitation = () => {
 
   useEffect(() => {
     if (canvasData === null) {
-      fetchQualifiers();
+      initQualifiers();
     }
 
     if (awardee !== null) {
@@ -482,7 +260,7 @@ const Invitation = () => {
         </Card>
       </Box>
       {awardee !== null && (
-        <InvitationCardFinal awardee={awardee} setCanvas={setCanvasData} />
+        <InvitationNew awardee={awardee} setCanvas={setCanvasData} />
       )}
       <Typography
         variant="body2"

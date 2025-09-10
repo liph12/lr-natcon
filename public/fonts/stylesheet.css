@@ -31,3 +31,21 @@
     font-display: swap;
 }
 
+/* Cinzel Regular */
+@font-face {
+  font-family: 'Cinzel';
+  src: url('Cinzel.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Cinzel Bold */
+@font-face {
+  font-family: 'Cinzel';
+  src: url('cinzel.bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+

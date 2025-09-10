@@ -10,6 +10,7 @@ import QRScanner from "./components/QRScanner";
 import TicketGenerator from "./components/TicketGenerator";
 import TicketDrawer from "./components/TicketDrawer";
 import InvitationGenerator from "./components/InvitationGenerator";
+import InvitationNew from "./components/InvitationNew";
 
 AxiosInstance.interceptors.request.use(function (config) {
   const token = localStorage.getItem("accessToken");
@@ -56,6 +57,7 @@ function App() {
         <Route path="/ticket-generator" element={<TicketGenerator />} />
         <Route path="/ticket" element={<TicketDrawer />} />
         <Route path="/invitation-dummy" element={<InvitationGenerator />} />
+        <Route path="/invitation-new" element={<InvitationNew />} />
       </Routes>
     </ThemeProvider>
   );
