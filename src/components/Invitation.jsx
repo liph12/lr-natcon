@@ -24,6 +24,7 @@ const Invitation = () => {
   const [onProgress, setOnProgres] = useState(false);
   const [awardee, setAwardee] = useState(null);
   const [canvasData, setCanvasData] = useState(null);
+  const currentYear = new Date().getFullYear();
 
   const columns = [
     { field: "id", headerName: "ID", width: 120 },
@@ -247,8 +248,8 @@ const Invitation = () => {
     };
 
     if (awardee !== null && canvasData !== null) {
-      // downloadCanvas();
-      uploadCanvasImage();
+      downloadCanvas();
+      // uploadCanvasImage();
     }
   }, [canvasData]);
 
@@ -292,15 +293,13 @@ const Invitation = () => {
           </CardContent>
         </Card>
       </Box>
-      {awardee !== null && (
-        <InvitationNew awardee={awardee} setCanvas={setCanvasData} />
-      )}
+      <InvitationNew awardee={awardee} setCanvas={setCanvasData} />
       <Typography
         variant="body2"
         color="text.secondary"
         sx={{ marginBottom: 5, textAlign: "center" }}
       >
-        LR NATCON 2024 | &copy; All Rights Reserved
+        LR NATCON {currentYear} | &copy; All Rights Reserved
       </Typography>
     </>
   );

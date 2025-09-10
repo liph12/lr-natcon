@@ -411,7 +411,7 @@ const Registration = () => {
             endIcon={<ExitToAppIcon />}
             loading={loadingConfirm}
             loadingPosition="end"
-            color="warning"
+            color="primary"
           >
             <span>Confirm</span>
           </LoadingButton>
@@ -742,7 +742,7 @@ const Registration = () => {
                         loading={loadingSubmit}
                         type="submit"
                         loadingPosition="end"
-                        color="warning"
+                        color="primary"
                         variant="contained"
                         disableElevation
                       >
@@ -764,8 +764,8 @@ const Registration = () => {
                       NATIONAL REAL ESTATE CONVENTION {currentYear}
                     </Typography>
                     <Typography variant="h6" sx={{ marginBottom: 3 }}>
-                      Inviting the BEST of the BEST in Philippine Real Estate{" "}
-                      {currentYear} into ONE GRAND NATIONAL CONVENTION
+                      Inviting the BEST of the BEST in Philippine Real Estate
+                      into ONE GRAND NATIONAL CONVENTION
                     </Typography>
                     <Divider sx={{ my: 2 }} />
                     <Typography
@@ -784,7 +784,7 @@ const Registration = () => {
                       <br />
                       <b>DAY 1 - October 19, {currentYear}</b> (Sunday)
                       Conference and Welcome Party. Registration starts at{" "}
-                      <b>10:30 A.M.</b> (Please take your early lunch). <br />
+                      <b>10:30 A.M.</b> (Please take your lunch early). <br />
                       <b>ATTIRE:</b> FH Polo Shirt (To be provided)
                     </Typography>
                     <Typography paragraph>
@@ -808,20 +808,21 @@ const Registration = () => {
                       ))}
                     </Box>
                     <Typography
-                      variant="body2"
+                      variant="body1"
                       color="error"
                       sx={{ marginBottom: 3 }}
                     >
-                      Note: If you confim, this link will expire after 5 minutes
-                      / after the registration process. <br /> PLEASE DO NOT
-                      SHARE THIS LINK TO ANYONE.
+                      NOTE: Prepare your HD business photo/s (for NATCON
+                      materials). <br /> After your confirmation, the link will
+                      expire in 5 minutes. <br /> PLEASE DO NOT SHARE THIS LINK
+                      WITH ANYONE.
                     </Typography>
                     <CardActions sx={{ marginLeft: -1 }}>
                       <FormControl variant="standard">
                         <Button
                           variant="contained"
                           endIcon={<OpenInNewIcon />}
-                          color="warning"
+                          color="primary"
                           onClick={handleOpenDialog}
                           disableElevation
                           // disabled={
@@ -842,7 +843,7 @@ const Registration = () => {
               <CardContent sx={{ margin: lg ? 3 : 1, textAlign: "center" }}>
                 <CheckCircleIcon
                   sx={{ fontSize: 70, marginBottom: 3 }}
-                  color="warning"
+                  color="primary"
                 />
                 <Typography
                   gutterBottom
@@ -868,8 +869,8 @@ const Registration = () => {
                   color="error"
                   sx={{ marginBottom: 1, fontWeight: "bold", marginTop: 4 }}
                 >
-                  We will send you an email attached with your QR Code within 48
-                  hours after your registration. <br />
+                  We will send you an email with your QR Code attached within 48
+                  hours. <br />
                   (This will serve as your ticket).
                   <br /> Kindly show your ticket at the registration booth
                   during the event.

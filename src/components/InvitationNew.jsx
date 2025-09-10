@@ -9,6 +9,7 @@ const InvitationNew = ({ awardee, setCanvas }) => {
     const { firstName, lastName, fullName, subtitle } = awardee;
 
     const canvas = canvasRef.current;
+
     if (!canvas) {
       console.error("Canvas reference is null.");
       return;
@@ -173,7 +174,9 @@ const InvitationNew = ({ awardee, setCanvas }) => {
   };
 
   useEffect(() => {
-    drawInvitation();
+    if (awardee !== null) {
+      drawInvitation();
+    }
   }, [awardee]);
 
   return (

@@ -10,11 +10,7 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
 import Modal from "@mui/material/Modal";
-import DialogTitle from "@mui/material/DialogTitle";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
@@ -25,7 +21,6 @@ import Avatar from "@mui/material/Avatar";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import Compressor from "compressorjs";
-import LinearProgress from "@mui/material/LinearProgress";
 import QRCode from "react-qr-code";
 import Toast from "./Toast";
 import QRBorder from "./QRBorder";
@@ -45,6 +40,7 @@ const ViewAwardees = () => {
   const [onProgress, setOnProgres] = useState(false);
   const [canvasQRBorder, setCanvasQRBorder] = useState(null);
   const [onProgressPreview, setOnProgressPreview] = useState(false);
+  const currentYear = new Date().getFullYear();
 
   const modalStyle = {
     position: "absolute",
@@ -256,8 +252,6 @@ const ViewAwardees = () => {
   };
 
   const formatAwardee = (data) => {
-    // const photo = `https://filipinohomes123.s3.ap-southeast-1.amazonaws.com/${data.photo}`;
-
     return {
       id: data.id,
       firstName: data.firstName.toUpperCase(),
@@ -394,39 +388,33 @@ const ViewAwardees = () => {
                     viewBox={`0 0 256 256`}
                   />
                 </Box>
-                <Grid container>
-                  <Grid item>
-                    <FormControl variant="standard" fullWidth>
-                      <TextField
-                        id="standard-basic"
-                        label="Seat Number"
-                        variant="filled"
-                        color="warning"
-                        name="last_name"
-                        size="small"
-                        autoComplete="off"
-                        onChange={handleChangeSeatNumber}
-                        value={
-                          seatNumber === null
-                            ? awardeeSelected.seatNumber
-                            : seatNumber
-                        }
-                      />
-                    </FormControl>
-                  </Grid>
-                  <Grid item>
-                    <LoadingButton
-                      variant="contained"
-                      size="medium"
-                      color="warning"
-                      sx={{ m: 1 }}
-                      loading={onProgressPreview}
-                      onClick={updateSeatNumber}
-                    >
-                      Update
-                    </LoadingButton>
-                  </Grid>
-                </Grid>
+                <Box display="flex" gap={2}>
+                  <TextField
+                    id="standard-basic"
+                    label="Seat Number"
+                    variant="outlined"
+                    color="warning"
+                    name="last_name"
+                    size="small"
+                    autoComplete="off"
+                    onChange={handleChangeSeatNumber}
+                    value={
+                      seatNumber === null
+                        ? awardeeSelected.seatNumber
+                        : seatNumber
+                    }
+                  />
+                  <LoadingButton
+                    variant="contained"
+                    color="primary"
+                    loading={onProgressPreview}
+                    onClick={updateSeatNumber}
+                    disableElevation
+                  >
+                    Update
+                  </LoadingButton>
+                </Box>
+
                 <Box mt={5}>
                   <Button onClick={handleCloseDialog} color="error">
                     Close
@@ -438,7 +426,7 @@ const ViewAwardees = () => {
                       loading={loadingApprove}
                       disabled={awardeeSelected.approved}
                       loadingPosition="end"
-                      color="warning"
+                      color="primary"
                     >
                       <span>Send Confirmation</span>
                     </LoadingButton>
@@ -481,7 +469,7 @@ const ViewAwardees = () => {
                 <Grid container spacing={5}>
                   <Grid item lg={1} md={2} xs={4}>
                     <Typography component="div" variant="body1" color="gray">
-                      APPROVED:
+                      APPROVED:{" "}
                     </Typography>
                   </Grid>
                   <Grid item lg={1} md={2} xs={4}>
@@ -547,7 +535,7 @@ const ViewAwardees = () => {
         color="text.secondary"
         sx={{ marginBottom: 5, textAlign: "center" }}
       >
-        LR NATCON 2024 | &copy; All Rights Reserved
+        LR NATCON {currentYear} | &copy; All Rights Reserved
       </Typography>
     </Box>
   );
