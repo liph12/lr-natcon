@@ -84,6 +84,19 @@ const InvitationGenerator = () => {
       if (andMatch) {
         // Remove 'AND' and split names
         let [name1, name2] = fullName.split(/\bAND\b/i).map((s) => s.trim());
+        // Truncate name1 to only the first two words if more than two
+        if (name1.split(" ").length > 2)
+          name1 = name1.split(" ").slice(0, 2).join(" ");
+        // For name2, always keep the last word (last name), and only truncate middle names if more than two words
+        const name2Parts = name2.split(" ");
+        if (name2Parts.length > 2) {
+          // Keep first, (optional) one middle, and last
+          name2 =
+            name2Parts[0] +
+            " " +
+            (name2Parts.length > 3 ? name2Parts[1] + " " : "") +
+            name2Parts[name2Parts.length - 1];
+        }
         // Check if name1 has two words
         if (name1.split(" ").length > 1) {
           // name1 (line 1), 'AND name2' (line 2)
@@ -149,16 +162,12 @@ const InvitationGenerator = () => {
       } else {
         // --- EXISTING LOGIC ---
         // Calculate textWidth and x for fallback logic
-        do {
-          context.font = `bold ${fontSize}px Gempire`;
-          context.textAlign = "left";
-          context.textBaseline = "middle";
-          textWidth = context.measureText(fullName).width;
-          x = 2450 - textWidth;
-          if (x < 180) {
-            fontSize -= 5;
-          }
-        } while (x < 180 && fontSize > 20);
+
+        context.font = `bold ${fontSize}px Gempire`;
+        context.textAlign = "left";
+        context.textBaseline = "middle";
+        textWidth = context.measureText(fullName).width;
+
         if (textWidth > 1800) {
           isTwoLine = true;
           // Draw first name on one line, last name on the next
@@ -168,20 +177,32 @@ const InvitationGenerator = () => {
           context.shadowBlur = 20;
           context.fillStyle = "#EFC124";
           // Center both lines
-          const firstName =
+          let firstName =
             awardee?.team?.toUpperCase() ??
             formatFirstName(awardee.firstName).toUpperCase();
+          // Only use first two words for firstName
+          if (firstName.split(" ").length > 2)
+            firstName = firstName.split(" ").slice(0, 2).join(" ");
+          // Adjust font size for firstName if needed
+          let fontSizeFirst = fontSize;
+          let firstNameWidth, xFirst;
+          do {
+            context.font = `bold ${fontSizeFirst}px Gempire`;
+            firstNameWidth = context.measureText(firstName).width;
+            xFirst = 2450 - firstNameWidth;
+            if (firstNameWidth > 2200) fontSizeFirst -= 5;
+          } while (firstNameWidth > 2200 && fontSizeFirst > 20);
           const lastName = awardee?.team?.toUpperCase()
             ? ""
             : awardee.lastName.toUpperCase();
-          const firstNameWidth = context.measureText(firstName).width;
           const lastNameWidth = context.measureText(lastName).width;
-          const xFirst = 2450 - firstNameWidth;
           const xLast = 2450 - lastNameWidth;
           yName = 850;
+          context.font = `bold ${fontSizeFirst}px Gempire`;
           context.fillText(firstName, xFirst, yName);
           if (!awardee?.team) {
-            yName += fontSize + 10;
+            yName += fontSizeFirst + 10;
+            context.font = `bold ${fontSizeFirst}px Gempire`;
             context.fillText(lastName, xLast, yName);
           }
           ySubtitle = yName + 100;
@@ -192,7 +213,11 @@ const InvitationGenerator = () => {
           context.shadowOffsetY = 10;
           context.shadowBlur = 20;
           context.fillStyle = "#EFC124";
-          context.fillText(fullName, x, 890);
+          // Calculate x for the current font size and fullName
+          context.font = `bold ${fontSize}px Gempire`;
+          const singleLineWidth = context.measureText(fullName).width;
+          const singleLineX = 2450 - singleLineWidth;
+          context.fillText(fullName, singleLineX, 890);
           ySubtitle = 850 + fontSize;
         }
       }
