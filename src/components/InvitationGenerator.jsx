@@ -3,8 +3,8 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "../../public/fonts/stylesheet.css";
-import invitationImg from "../assets/images/invitation_2025.png";
-import invitationTeamImg from "../assets/images/invitation_team.png";
+import invitationImg from "../assets/images/natcon_2025.png";
+import invitationTeamImg from "../assets/images/natcon_2025.png";
 
 const defaultAwardee = {
   firstName: "John",
@@ -75,100 +75,148 @@ const InvitationGenerator = () => {
       context.drawImage(img, 0, 0, canvas.width, canvas.height);
 
       // Declare shared variables for all logic branches
-      let fontSize = 150;
+      let fontSize = 175;
       let textWidth, x, yName, ySubtitle;
       let isTwoLine = false;
 
       // --- NEW LOGIC FOR 'AND' NAMES ---
-      let andMatch = fullName.match(/\bAND\b/i);
+      console.log(`Full Name Problem : ${fullName}`);
+      let andMatch = fullName.match(/\s*&\s*/i);
+      // if (andMatch) {
+      //   // Remove 'AND' or '&' and split names
+      //   let [name1, name2] = fullName
+      //     .split(/\s*&\s*/i)
+      //     .map((s) => s.trim());
+
+      //   // Ensure name1 and name2 are defined without truncating
+      //   if (!name1) name1 = "";
+      //   if (!name2) name2 = "";
+      //   // Check if name1 has two words
+      //   if (name1.split(" ").length > 1) {
+      //     console.log(`1st condition`);
+      //     // name1 (line 1), 'AND name2' (line 2)
+      //     context.shadowColor = "rgba(0, 0, 0, 0.5)";
+      //     context.shadowOffsetX = 10;
+      //     context.shadowOffsetY = 10;
+      //     context.shadowBlur = 20;
+      //     context.fillStyle = "#EFC124";
+      //     // Adjust font size for both lines independently
+      //     let fontSize1 = fontSize;
+      //     let fontSize2 = fontSize;
+      //     let name1Width, xName1;
+
+      //     // 'AND name2' on next line, adjust font size if needed
+      //     let andName2 = `& ${name2}`;
+      //     let name2Width, xName2;
+      //     do {
+      //       context.font = `bold ${fontSize2}px Cinzel`;
+      //       name2Width = context.measureText(andName2).width;
+      //       xName2 = 2370 - name2Width;
+      //       if (name2Width > 1725) fontSize2 -= 5;
+      //     } while (name2Width > 1725 && fontSize2 > 20);
+      //     let y2 = 650 + fontSize2 + 10;
+      //     context.font = `bold ${fontSize2}px Cinzel`;
+      //     context.fillText(andName2, xName2, y2);
+      //     ySubtitle = y2 + 100;
+
+      //     // Adjust font size of the first line to match the second line
+      //     fontSize1 = fontSize2;
+      //     do {
+      //       context.font = `bold ${fontSize1}px Cinzel`;
+      //       name1Width = context.measureText(name1).width;
+      //       xName1 = 2370 - name1Width;
+      //       if (name1Width > 1725) fontSize1 -= 5;
+      //     } while (name1Width > 1725 && fontSize1 > 20);
+      //     let y1 = y2 - fontSize1 - 10;
+      //     context.font = `bold ${fontSize1}px Cinzel`;
+      //     context.fillText(name1, xName1, y1);
+      //   } else {
+      //     console.log(`2nd condition`);
+      //     // name1 AND (line 1), name2 (line 2)
+      //     context.shadowColor = "rgba(0, 0, 0, 0.5)";
+      //     context.shadowOffsetX = 10;
+      //     context.shadowOffsetY = 10;
+      //     context.shadowBlur = 20;
+      //     context.fillStyle = "#EFC124";
+      //     // Adjust font size for both lines
+      //     let name1Width, andWidth, name2Width, xName1, xAnd, xName2;
+      //     let fontSizeName2 = fontSize;
+      //     do {
+      //       context.font = `bold ${fontSizeName2}px Cinzel`;
+      //       name2Width = context.measureText(name2).width;
+      //       xName2 = 2370 - name2Width;
+      //       if (name2Width > 1700) fontSizeName2 -= 5;
+      //     } while (name2Width > 1700 && fontSizeName2 > 20);
+      //     let y2 = 650 + fontSizeName2 + 10;
+      //     context.font = `bold ${fontSizeName2}px Cinzel`;
+      //     context.fillText(name2, xName2, y2);
+      //     ySubtitle = y2 + 125;
+
+      //     // Draw name1 and 'AND' on the first line
+      //     context.font = `bold ${fontSizeName2}px Cinzel`;
+      //     name1Width = context.measureText(name1).width;
+      //     andWidth = context.measureText("&").width;
+      //     xName1 = 2200 - name1Width;
+      //     let y1 = y2 - fontSizeName2 - 10;
+      //     context.fillText(name1, xName1, y1);
+      //     // '&' on same line, right after name1
+      //     context.font = `bold ${fontSizeName2}px Cinzel`;
+      //     xAnd = xName1 + name1Width + 20;
+      //     context.fillText("&", xAnd, y1);
+      //   }
       if (andMatch) {
-        // Remove 'AND' and split names
-        let [name1, name2] = fullName.split(/\bAND\b/i).map((s) => s.trim());
-        // Truncate name1 to only the first two words if more than two
-        if (name1.split(" ").length > 2)
-          name1 = name1.split(" ").slice(0, 2).join(" ");
-        // For name2, always keep the last word (last name), and only truncate middle names if more than two words
-        const name2Parts = name2.split(" ");
-        if (name2Parts.length > 2) {
-          // Keep first, (optional) one middle, and last
-          name2 =
-            name2Parts[0] +
-            " " +
-            (name2Parts.length > 3 ? name2Parts[1] + " " : "") +
-            name2Parts[name2Parts.length - 1];
-        }
+        // Remove 'AND' or '&' and split names
+        let [name1, name2] = fullName.split(/\s*&\s*/i).map((s) => s.trim());
+
+        // Ensure name1 and name2 are defined without truncating
+        if (!name1) name1 = "";
+        if (!name2) name2 = "";
         // Check if name1 has two words
-        if (name1.split(" ").length > 1) {
-          // name1 (line 1), 'AND name2' (line 2)
-          context.shadowColor = "rgba(0, 0, 0, 0.5)";
-          context.shadowOffsetX = 10;
-          context.shadowOffsetY = 10;
-          context.shadowBlur = 20;
-          context.fillStyle = "#EFC124";
-          // Adjust font size for both lines independently
-          let fontSize1 = fontSize;
-          let fontSize2 = fontSize;
-          let name1Width, xName1;
-          do {
-            context.font = `bold ${fontSize1}px Gempire`;
-            name1Width = context.measureText(name1).width;
-            xName1 = 2450 - name1Width;
-            if (name1Width > 2200) fontSize1 -= 5;
-          } while (name1Width > 2200 && fontSize1 > 20);
-          let y1 = 850;
-          context.font = `bold ${fontSize1}px Gempire`;
-          context.fillText(name1, xName1, y1);
+        console.log(`1st condition`);
+        // name1 (line 1), 'AND name2' (line 2)
+        context.shadowColor = "rgba(0, 0, 0, 0.5)";
+        context.shadowOffsetX = 10;
+        context.shadowOffsetY = 10;
+        context.shadowBlur = 20;
+        context.fillStyle = "#EFC124";
+        // Adjust font size for both lines independently
+        let fontSize1 = fontSize;
+        let fontSize2 = fontSize;
+        let name1Width, xName1;
 
-          // 'AND name2' on next line, adjust font size if needed
-          let andName2 = `AND ${name2}`;
-          let name2Width, xName2;
-          do {
-            context.font = `bold ${fontSize2}px Gempire`;
-            name2Width = context.measureText(andName2).width;
-            xName2 = 2450 - name2Width;
-            if (name2Width > 2200) fontSize2 -= 5;
-          } while (name2Width > 2200 && fontSize2 > 20);
-          let y2 = y1 + fontSize2 + 10;
-          context.font = `bold ${fontSize2}px Gempire`;
-          context.fillText(andName2, xName2, y2);
-          ySubtitle = y2 + 100;
-        } else {
-          // name1 AND (line 1), name2 (line 2)
-          context.shadowColor = "rgba(0, 0, 0, 0.5)";
-          context.shadowOffsetX = 10;
-          context.shadowOffsetY = 10;
-          context.shadowBlur = 20;
-          context.fillStyle = "#EFC124";
-          // Adjust font size for both lines
-          let name1Width, andWidth, name2Width, xName1, xAnd, xName2;
-          context.font = `bold ${fontSize}px Gempire`;
+        // 'AND name2' on next line, adjust font size if needed
+        let andName2 = `& ${name2}`;
+        let name2Width, xName2;
+        do {
+          context.font = `bold ${fontSize2}px Cinzel`;
+          name2Width = context.measureText(andName2).width;
+          xName2 = 2370 - name2Width;
+          if (name2Width > 1725) fontSize2 -= 5;
+        } while (name2Width > 1725 && fontSize2 > 20);
+        let y2 = 650 + fontSize2 + 10;
+        context.font = `bold ${fontSize2}px Cinzel`;
+        context.fillText(andName2, xName2, y2);
+        ySubtitle = y2 + 120;
+
+        // Adjust font size of the first line to match the second line
+        fontSize1 = fontSize2;
+        do {
+          context.font = `bold ${fontSize1}px Cinzel`;
           name1Width = context.measureText(name1).width;
-          andWidth = context.measureText("AND").width;
-          xName1 = 1975 - name1Width;
-          let y1 = 850;
-          context.fillText(name1, xName1, y1);
-          // 'AND' on same line, right after name1
-          context.font = `bold ${fontSize}px Gempire`;
-          xAnd = xName1 + name1Width + 20;
-          context.fillText("AND", xAnd, y1);
-          // name2 on next line
-          context.font = `bold ${fontSize}px Gempire`;
-          name2Width = context.measureText(name2).width;
-          xName2 = 2450 - name2Width;
-          let y2 = y1 + fontSize + 10;
-          context.fillText(name2, xName2, y2);
-          ySubtitle = y2 + 100;
-        }
+          xName1 = 2370 - name1Width;
+          if (name1Width > 1725) fontSize1 -= 5;
+        } while (name1Width > 1725 && fontSize1 > 20);
+        let y1 = y2 - fontSize1 - 10;
+        context.font = `bold ${fontSize1}px Cinzel`;
+        context.fillText(name1, xName1, y1);
       } else {
-        // --- EXISTING LOGIC ---
-        // Calculate textWidth and x for fallback logic
-
-        context.font = `bold ${fontSize}px Gempire`;
+        context.font = `bold ${fontSize}px Cinzel`;
         context.textAlign = "left";
         context.textBaseline = "middle";
         textWidth = context.measureText(fullName).width;
 
-        if (textWidth > 1800) {
+        if (textWidth > 2000) {
+          console.log(`3rd condition`);
           isTwoLine = true;
           // Draw first name on one line, last name on the next
           context.shadowColor = "rgba(0, 0, 0, 0.5)";
@@ -180,33 +228,31 @@ const InvitationGenerator = () => {
           let firstName =
             awardee?.team?.toUpperCase() ??
             formatFirstName(awardee.firstName).toUpperCase();
-          // Only use first two words for firstName
-          if (firstName.split(" ").length > 2)
-            firstName = firstName.split(" ").slice(0, 2).join(" ");
-          // Adjust font size for firstName if needed
+          // No truncation: use full firstName
           let fontSizeFirst = fontSize;
           let firstNameWidth, xFirst;
           do {
-            context.font = `bold ${fontSizeFirst}px Gempire`;
+            context.font = `bold ${fontSizeFirst}px Cinzel`;
             firstNameWidth = context.measureText(firstName).width;
-            xFirst = 2450 - firstNameWidth;
-            if (firstNameWidth > 2200) fontSizeFirst -= 5;
-          } while (firstNameWidth > 2200 && fontSizeFirst > 20);
+            xFirst = 2370 - firstNameWidth;
+            if (firstNameWidth > 1700) fontSizeFirst -= 5;
+          } while (firstNameWidth > 1700 && fontSizeFirst > 20);
           const lastName = awardee?.team?.toUpperCase()
             ? ""
             : awardee.lastName.toUpperCase();
           const lastNameWidth = context.measureText(lastName).width;
-          const xLast = 2450 - lastNameWidth;
-          yName = 850;
-          context.font = `bold ${fontSizeFirst}px Gempire`;
+          const xLast = 2370 - lastNameWidth;
+          yName = 650;
+          context.font = `bold ${fontSizeFirst}px Cinzel`;
           context.fillText(firstName, xFirst, yName);
           if (!awardee?.team) {
             yName += fontSizeFirst + 10;
-            context.font = `bold ${fontSizeFirst}px Gempire`;
+            context.font = `bold ${fontSizeFirst}px Cinzel`;
             context.fillText(lastName, xLast, yName);
           }
-          ySubtitle = yName + 100;
+          ySubtitle = yName + 125;
         } else {
+          console.log(`4th condition`);
           // Single line as before
           context.shadowColor = "rgba(0, 0, 0, 0.5)";
           context.shadowOffsetX = 10;
@@ -214,17 +260,23 @@ const InvitationGenerator = () => {
           context.shadowBlur = 20;
           context.fillStyle = "#EFC124";
           // Calculate x for the current font size and fullName
-          context.font = `bold ${fontSize}px Gempire`;
-          const singleLineWidth = context.measureText(fullName).width;
-          const singleLineX = 2450 - singleLineWidth;
-          context.fillText(fullName, singleLineX, 890);
-          ySubtitle = 850 + fontSize;
+          let fontSizeSingle = fontSize;
+          let singleLineWidth, singleLineX;
+          do {
+            context.font = `bold ${fontSizeSingle}px Cinzel`;
+            singleLineWidth = context.measureText(fullName).width;
+            singleLineX = 2370 - singleLineWidth;
+            if (singleLineWidth > 1600) fontSizeSingle -= 5;
+          } while (singleLineWidth > 1600 && fontSizeSingle > 20);
+          context.font = `bold ${fontSizeSingle}px Cinzel`;
+          context.fillText(fullName, singleLineX, 750);
+          ySubtitle = 700 + fontSizeSingle;
         }
       }
 
       // Draw 'VIP | TOP AGENT' below the name (dynamic y)
-      const subtitle = "VIP | TOP AGENT";
-      context.font = `normal 90px Gempire`;
+      const subtitle = awardee.subtitle || "VIP | TOP AGENT";
+      context.font = `bold 90px 'Times New Roman', Times, serif`;
       context.shadowColor = "rgba(0,0,0,0.4)";
       context.shadowOffsetX = 4;
       context.shadowOffsetY = 4;
@@ -232,7 +284,7 @@ const InvitationGenerator = () => {
       context.fillStyle = "#fff";
       // Center the subtitle under the name
       const subtitleWidth = context.measureText(subtitle).width;
-      const subtitleX = 2450 - subtitleWidth;
+      const subtitleX = 2370 - subtitleWidth;
       context.fillText(subtitle, subtitleX, ySubtitle);
     };
   };
@@ -276,6 +328,15 @@ const InvitationGenerator = () => {
           value={awardee.team || ""}
           onChange={(e) =>
             setAwardee((a) => ({ ...a, team: e.target.value || null }))
+          }
+          style={{ marginRight: 8 }}
+        />
+        <input
+          type="text"
+          placeholder="Subtitle (e.g. VIP | TOP AGENT)"
+          value={awardee.subtitle || ""}
+          onChange={(e) =>
+            setAwardee((a) => ({ ...a, subtitle: e.target.value }))
           }
           style={{ marginRight: 8 }}
         />
