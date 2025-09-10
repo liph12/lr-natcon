@@ -13,13 +13,13 @@ import CardMedia from "@mui/material/CardMedia";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
+import Modal from "@mui/material/Modal";
 import DialogTitle from "@mui/material/DialogTitle";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import NATCONBackGround from "../assets/images/natcon_rect_bg.jpg";
 import AxiosInstance from "../config/AxiosInstance";
 import Avatar from "@mui/material/Avatar";
 import FormControl from "@mui/material/FormControl";
@@ -45,6 +45,17 @@ const ViewAwardees = () => {
   const [onProgress, setOnProgres] = useState(false);
   const [canvasQRBorder, setCanvasQRBorder] = useState(null);
   const [onProgressPreview, setOnProgressPreview] = useState(false);
+
+  const modalStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "auto",
+    bgcolor: "background.paper",
+    p: 2,
+    borderRadius: 3,
+  };
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
@@ -245,7 +256,7 @@ const ViewAwardees = () => {
   };
 
   const formatAwardee = (data) => {
-    const photo = `https://filipinohomes123.s3.ap-southeast-1.amazonaws.com/${data.photo}`;
+    // const photo = `https://filipinohomes123.s3.ap-southeast-1.amazonaws.com/${data.photo}`;
 
     return {
       id: data.id,
@@ -255,7 +266,7 @@ const ViewAwardees = () => {
       phone: data.phone,
       team: data.team,
       regId: data.regId,
-      photo: photo,
+      photos: data.photos,
       qrCode: data.qrCode,
       approved: data.approved,
       qrValue: `${data.firstName.replace(" ", "-")}|${data.regId}|${data.id}`,
@@ -300,143 +311,143 @@ const ViewAwardees = () => {
         open={toastOpen}
         handleClose={handleCloseToast}
       />
-      <Dialog open={openDialog} onClose={handleCloseDialog}>
-        {onProgressPreview && <LinearProgress color="warning" />}
-        <DialogTitle id="alert-dialog-title">
+      <Modal open={openDialog} onClose={handleCloseDialog}>
+        <Box sx={modalStyle}>
           <Grid container>
             <Grid item>
               <InfoOutlinedIcon sx={{ mt: 0.5, mr: 1 }} />
             </Grid>
             <Grid item>Information on Review</Grid>
           </Grid>
-        </DialogTitle>
-        <DialogContent>
           {awardeeSelected ? (
-            <Box>
-              <Box
-                sx={{
-                  justifyContent: "center",
-                  display: "flex",
-                  marginBottom: 3,
-                }}
-              >
-                <Avatar
-                  alt={awardeeSelected.firstName}
-                  src={awardeeSelected.photo}
-                  sx={{ width: "auto", height: 280 }}
-                  variant="rounded"
-                />
-              </Box>
-              <Box sx={{ marginY: 5 }}>
-                {uploadingImage ? (
-                  <Box sx={{ width: "100%" }}>
-                    <LinearProgress color="warning" />
-                  </Box>
-                ) : (
-                  <FormControl fullWidth error>
-                    <TextField
-                      name="photo"
-                      variant="outlined"
-                      size="small"
-                      type="file"
-                      onChange={handleChangeUploadPhoto}
-                    />
-                  </FormControl>
-                )}
-              </Box>
-              <Typography component="div" variant="h5" sx={{ mb: 1 }}>
-                {awardeeSelected.firstName} {awardeeSelected.lastName}
-              </Typography>
-              <Typography component="div" variant="body2" sx={{ mb: 1 }}>
-                Email: {awardeeSelected.email}
-              </Typography>
-              <Typography component="div" variant="body2" sx={{ mb: 1 }}>
-                Phone: {awardeeSelected.phone}
-              </Typography>
-              {awardeeSelected.team === "Guest" ? (
-                <>
-                  <Typography component="div" variant="body2" sx={{ mb: 1 }}>
-                    Guest of:{" "}
-                    {awardeeSelected.owner?.includes(" --- ")
-                      ? awardeeSelected.owner?.replace(" --- ", " AND ")
-                      : awardeeSelected.owner}
-                  </Typography>
-                  <Typography component="div" variant="body2" sx={{ mb: 1 }}>
-                    Polo shirt size: {awardeeSelected?.poloShirtSize}
-                  </Typography>
-                </>
-              ) : (
-                <Typography component="div" variant="body2" sx={{ mb: 1 }}>
-                  Team: {awardeeSelected.team}
-                </Typography>
-              )}
-              <Box
-                sx={{
-                  justifyContent: "center",
-                  display: "flex",
-                  marginBottom: 3,
-                  mt: 5,
-                }}
-              >
-                {awardeeSelected.qrCode === null ||
-                awardeeSelected.qrCode === "" ? (
-                  <></>
-                ) : (
-                  <Avatar
-                    alt={awardeeSelected.firstName}
-                    src={`https://filipinohomes123.s3.amazonaws.com/${awardeeSelected.qrCode}`}
-                    sx={{ width: "auto", height: 280 }}
-                    variant="square"
-                  />
-                )}
-                <QRCode
-                  size={256}
-                  style={{
-                    height: "auto",
-                    maxWidth: "100%",
-                    width: "100%",
-                    display: "none",
+            <Box sx={{ width: "50vw" }}>
+              <Box p={3}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    marginBottom: 3,
+                    overflow: "auto",
+                    gap: 1,
                   }}
-                  value={`${awardeeSelected.firstName}|${awardeeSelected.regId}|${awardeeSelected.id}`}
-                  viewBox={`0 0 256 256`}
-                />
-              </Box>
-              <Grid container>
-                <Grid item>
-                  <FormControl variant="standard" fullWidth>
-                    <TextField
-                      id="standard-basic"
-                      label="Seat Number"
-                      variant="filled"
-                      color="warning"
-                      name="last_name"
-                      size="small"
-                      autoComplete="off"
-                      onChange={handleChangeSeatNumber}
-                      value={
-                        seatNumber === null
-                          ? awardeeSelected.seatNumber
-                          : seatNumber
-                      }
+                >
+                  {awardeeSelected.photos.map((photo, idx) => (
+                    <Avatar
+                      key={idx}
+                      alt={awardeeSelected.firstName}
+                      src={photo}
+                      sx={{ width: "auto", height: 280 }}
+                      variant="rounded"
                     />
-                  </FormControl>
+                  ))}
+                </Box>
+                <Typography component="div" variant="h5" sx={{ mb: 1 }}>
+                  {awardeeSelected.firstName} {awardeeSelected.lastName}
+                </Typography>
+                <Typography component="div" variant="body2" sx={{ mb: 1 }}>
+                  Email: {awardeeSelected.email}
+                </Typography>
+                <Typography component="div" variant="body2" sx={{ mb: 1 }}>
+                  Phone: {awardeeSelected.phone}
+                </Typography>
+                {awardeeSelected.team === "Guest" ? (
+                  <>
+                    <Typography component="div" variant="body2" sx={{ mb: 1 }}>
+                      Guest of:{" "}
+                      {awardeeSelected.owner?.includes(" --- ")
+                        ? awardeeSelected.owner?.replace(" --- ", " & ")
+                        : awardeeSelected.owner}
+                    </Typography>
+                  </>
+                ) : (
+                  <Typography component="div" variant="body2" sx={{ mb: 1 }}>
+                    Team: {awardeeSelected.team}
+                  </Typography>
+                )}
+                <Box
+                  sx={{
+                    justifyContent: "center",
+                    display: "flex",
+                    marginBottom: 3,
+                    mt: 5,
+                  }}
+                >
+                  {awardeeSelected.qrCode === null ||
+                  awardeeSelected.qrCode === "" ? (
+                    <></>
+                  ) : (
+                    <Avatar
+                      alt={awardeeSelected.firstName}
+                      src={`https://filipinohomes123.s3.amazonaws.com/${awardeeSelected.qrCode}`}
+                      sx={{ width: "auto", height: 280 }}
+                      variant="square"
+                    />
+                  )}
+                  <QRCode
+                    size={256}
+                    style={{
+                      height: "auto",
+                      maxWidth: "100%",
+                      width: "100%",
+                      display: "none",
+                    }}
+                    value={`${awardeeSelected.firstName}|${awardeeSelected.regId}|${awardeeSelected.id}`}
+                    viewBox={`0 0 256 256`}
+                  />
+                </Box>
+                <Grid container>
+                  <Grid item>
+                    <FormControl variant="standard" fullWidth>
+                      <TextField
+                        id="standard-basic"
+                        label="Seat Number"
+                        variant="filled"
+                        color="warning"
+                        name="last_name"
+                        size="small"
+                        autoComplete="off"
+                        onChange={handleChangeSeatNumber}
+                        value={
+                          seatNumber === null
+                            ? awardeeSelected.seatNumber
+                            : seatNumber
+                        }
+                      />
+                    </FormControl>
+                  </Grid>
+                  <Grid item>
+                    <LoadingButton
+                      variant="contained"
+                      size="medium"
+                      color="warning"
+                      sx={{ m: 1 }}
+                      loading={onProgressPreview}
+                      onClick={updateSeatNumber}
+                    >
+                      Update
+                    </LoadingButton>
+                  </Grid>
                 </Grid>
-                <Grid item>
-                  <LoadingButton
-                    variant="contained"
-                    size="medium"
-                    color="warning"
-                    sx={{ m: 1 }}
-                    loading={onProgressPreview}
-                    onClick={updateSeatNumber}
-                  >
-                    Update
-                  </LoadingButton>
-                </Grid>
-              </Grid>
+                <Box mt={5}>
+                  <Button onClick={handleCloseDialog} color="error">
+                    Close
+                  </Button>
+                  {awardeeSelected && (
+                    <LoadingButton
+                      onClick={approveDialog}
+                      endIcon={<HowToRegIcon />}
+                      loading={loadingApprove}
+                      disabled={awardeeSelected.approved}
+                      loadingPosition="end"
+                      color="warning"
+                    >
+                      <span>Send Confirmation</span>
+                    </LoadingButton>
+                  )}
+                </Box>
+              </Box>
             </Box>
           ) : (
-            <>
+            <Box width={300}>
               <Typography
                 component="div"
                 variant="h5"
@@ -444,34 +455,17 @@ const ViewAwardees = () => {
               >
                 Loading...
               </Typography>
-            </>
+            </Box>
           )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="error">
-            Close
-          </Button>
-          {awardeeSelected && (
-            <LoadingButton
-              onClick={approveDialog}
-              endIcon={<HowToRegIcon />}
-              loading={loadingApprove}
-              disabled={awardeeSelected.approved}
-              loadingPosition="end"
-              color="warning"
-            >
-              <span>Send Confirmation</span>
-            </LoadingButton>
-          )}
-        </DialogActions>
-      </Dialog>
+        </Box>
+      </Modal>
       <Box sx={{ justifyContent: "center", display: "flex" }}>
         <Card sx={{ maxWidth: "80vw", margin: lg ? 10 : 5 }}>
           <CardMedia
             component="img"
             alt="NATON 2024 Background"
             height="auto"
-            image={NATCONBackGround}
+            image={`https://leuteriorealty.com/images/natcon_rect_bg_2025.jpg`}
           />
           <CardContent sx={{ margin: lg ? 3 : 1 }}>
             <Box sx={{ marginBottom: 3 }}>

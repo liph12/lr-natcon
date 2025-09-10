@@ -3,7 +3,6 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import DownloadIcon from "@mui/icons-material/Download";
 import { LoadingButton } from "@mui/lab";
 import { useMediaQuery } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -29,15 +28,14 @@ import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState, useRef } from "react";
-import NATCONBackGround from "../assets/images/natcon_rect_bg.jpg";
 import AxiosInstance from "../config/AxiosInstance";
 import Toast from "./Toast";
-import QRCode from "qrcode.react";
 import { teams } from "../config/Data";
 import Compressor from "compressorjs";
-import qrFrame from "../assets/images/qr_frame_rev.png";
 import bgAudioTrack from "../assets/audio/bg_audio_track.mp3";
 import Divider from "@mui/material/Divider";
+
+const attireColors = ["light", "primary", "dark", "yellow", "danger"];
 
 const Registration = () => {
   const theme = useTheme();
@@ -53,12 +51,12 @@ const Registration = () => {
     last_name: "",
     birthday: "",
     gender: "",
-    photo: "",
+    photos: "",
     first_name_: "",
     last_name_: "",
     birthday_: "",
     gender_: "",
-    photo_: "",
+    photos_: "",
     email: "",
     phone: "",
     team: guest ? "Guest" : "",
@@ -78,8 +76,9 @@ const Registration = () => {
   const [loadingConfirm, setLoadingConfirm] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [session, setSession] = useState(true);
+  const [photos, setPhotos] = useState([]);
+  const [photos_, setPhotos_] = useState([]);
 
-  const canvasRef = useRef(null);
   const audio = new Audio(bgAudioTrack);
   const currentYear = new Date().getFullYear();
 
@@ -158,27 +157,18 @@ const Registration = () => {
       formData.append("guest", guest);
 
       Object.keys(fields).forEach((key) => {
-        formData.append(key, fields[key]);
+        if (key === "photos") {
+          photos.forEach((p) => {
+            formData.append("photos[]", p);
+          });
+        } else if (key === "photos_") {
+          photos_.forEach((p) => {
+            formData.append("photos_[]", p);
+          });
+        } else {
+          formData.append(key, fields[key]);
+        }
       });
-
-      // formData.append("registration_id", fields.registration_id);
-      // formData.append("first_name", fields.first_name);
-      // formData.append("last_name", fields.last_name);
-      // formData.append("birthday", fields.birthday);
-      // formData.append("gender", fields.gender);
-      // formData.append("photo", fields.photo);
-      // formData.append("first_name_", fields.first_name_);
-      // formData.append("last_name_", fields.last_name_);
-      // formData.append("birthday_", fields.birthday_);
-      // formData.append("gender_", fields.gender_);
-      // formData.append("photo_", fields.photo_);
-      // formData.append("email", fields.email);
-      // formData.append("phone", fields.phone);
-      // formData.append("team", fields.team);
-      // formData.append("combined", fields.combined);
-      // formData.append("guest_of", fields.guest_of);
-      // formData.append("guest", guest);
-      // formData.append("polo_shirt_size", fields.polo_shirt_size);
 
       setLoadingSubmit(true);
       clearErrors();
@@ -294,7 +284,7 @@ const Registration = () => {
       const qrName = response.data.qr_name;
       const tmpName = response.data.invited.name;
       const tmpLast = response.data.invited.last;
-      const combined = tmpName.includes(" AND ");
+      const combined = tmpName.includes(" & ");
 
       setFieldValue("registration_id", localStorage.getItem("regId"));
       setFieldValue("email", response.data.email);
@@ -313,9 +303,7 @@ const Registration = () => {
             ? qrName.filter(
                 (e) =>
                   e.split("/")[2] ===
-                  `${tmpName
-                    .split(" AND ")[0]
-                    .replace(" ", "-")}-${tmpLast}.png`
+                  `${tmpName.split(" & ")[0].replace(" ", "-")}-${tmpLast}.png`
               )
             : tmpName.replace(" ", "-")
         );
@@ -328,7 +316,7 @@ const Registration = () => {
             qrName.filter(
               (e) =>
                 e.split("/")[2] ===
-                `${tmpName.split(" AND ")[1].replace(" ", "-")}-${tmpLast}.png`
+                `${tmpName.split(" & ")[1].replace(" ", "-")}-${tmpLast}.png`
             )
           );
         }
@@ -337,19 +325,45 @@ const Registration = () => {
   };
 
   const handleChangeUploadPhoto = async (e) => {
-    const fileObj = e.target.files[0];
+    const selectedFiles = Array.from(e.target.files);
 
-    new Compressor(fileObj, {
-      quality: 0.8,
-      success: async (compressedResult) => {
-        const base64 = await convertBase64(compressedResult);
+    if (selectedFiles.length < 3) {
+      const filePromises = selectedFiles.map(
+        (fileObj) =>
+          new Promise((resolve) => {
+            new Compressor(fileObj, {
+              quality: 0.8,
+              success: async (compressedResult) => {
+                const base64 = await convertBase64(compressedResult);
+                resolve(base64);
+              },
+            });
+          })
+      );
 
-        setFields((prev) => ({
+      const base64Files = await Promise.all(filePromises);
+
+      console.log(base64Files);
+
+      if (e.target.name === "photos") {
+        setPhotos(base64Files);
+      } else {
+        setPhotos_(base64Files);
+      }
+    } else {
+      if (e.target.name === "photos") {
+        setErrors((prev) => ({
           ...prev,
-          [e.target.name]: base64,
+          photos: "You can only select up to 3 photos.",
         }));
-      },
-    });
+
+        return;
+      }
+      setErrors((prev) => ({
+        ...prev,
+        photos_: "You can only select up to 3 photos.",
+      }));
+    }
   };
 
   useEffect(() => {
@@ -409,7 +423,7 @@ const Registration = () => {
             component="img"
             alt={`NATON ${currentYear} Background`}
             height="auto"
-            image={NATCONBackGround}
+            image={`https://leuteriorealty.com/images/natcon_rect_bg_2025.jpg`}
           />
           {session && (
             <Box>
@@ -425,12 +439,12 @@ const Registration = () => {
                       >
                         REGISTER TO NATCON {currentYear}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
+                      {/* <Typography variant="body2" color="text.secondary">
                         Registration ID:{" "}
                         <Typography variant="span" color="error">
                           {fields.registration_id}
                         </Typography>
-                      </Typography>
+                      </Typography> */}
                     </Box>
                     <Grid container spacing={5}>
                       <Grid item lg={3} xs={12} md={12}>
@@ -507,37 +521,27 @@ const Registration = () => {
                       <Grid item lg={3} xs={12} md={12}>
                         <FormControl fullWidth error>
                           <TextField
-                            name="photo"
+                            name="photos"
                             variant="outlined"
                             size="small"
                             type="file"
+                            inputProps={{ multiple: true }}
                             onChange={handleChangeUploadPhoto}
                           />
-                          <FormHelperText>{errors.photo}</FormHelperText>
+                          <FormHelperText>{errors.photos}</FormHelperText>
                         </FormControl>
                       </Grid>
-                      <Grid item lg={3} xs={12} md={12}>
+                      <Grid item lg={6} xs={12} md={12}>
                         <Typography variant="body2" color="text.secondary">
-                          <Typography variant="span" color="warning.main">
-                            Please upload a formal photo (for verification)
+                          <Typography variant="span" color="danger.main">
+                            PLEASE UPLOAD HD BUSINESS PHOTO/S (UP TO 3) <br />{" "}
+                            FOR NATCON MATERIALS
+                          </Typography>
+                          <br />
+                          <Typography variant="caption">
+                            You can select multiple photos to be uploaded.
                           </Typography>
                         </Typography>
-                      </Grid>
-                      <Grid item lg={3} xs={12} md={12}>
-                        <FormControl variant="standard" fullWidth>
-                          <TextField
-                            id="standard-basic"
-                            label="Day 1 polo shirt size (for 10 y/o above)"
-                            variant="standard"
-                            color="warning"
-                            name="polo_shirt_size"
-                            value={fields.polo_shirt_size}
-                            onChange={handleChangeField}
-                          />
-                          <FormHelperText error>
-                            {errors.polo_shirt_size}
-                          </FormHelperText>
-                        </FormControl>
                       </Grid>
                     </Grid>
                     {localStorage.getItem("combined") === "1" && (
@@ -618,19 +622,25 @@ const Registration = () => {
                         <Grid item lg={3} xs={12} md={12}>
                           <FormControl fullWidth error>
                             <TextField
-                              name="photo_"
+                              name="photos_"
                               variant="outlined"
                               size="small"
                               type="file"
+                              inputProps={{ multiple: true }}
                               onChange={handleChangeUploadPhoto}
                             />
-                            <FormHelperText>{errors.photo_}</FormHelperText>
+                            <FormHelperText>{errors.photos_}</FormHelperText>
                           </FormControl>
                         </Grid>
-                        <Grid item lg={3} xs={12} md={12}>
+                        <Grid item lg={6} xs={12} md={12}>
                           <Typography variant="body2" color="text.secondary">
-                            <Typography variant="span" color="warning.main">
-                              Please upload a formal photo (for verification)
+                            <Typography variant="span" color="danger.main">
+                              PLEASE UPLOAD HD BUSINESS PHOTO/S (UP TO 3) <br />{" "}
+                              FOR NATCON MATERIALS
+                            </Typography>
+                            <br />
+                            <Typography variant="caption">
+                              You can select multiple photos to be uploaded.
                             </Typography>
                           </Typography>
                         </Grid>
@@ -754,7 +764,7 @@ const Registration = () => {
                       NATIONAL REAL ESTATE CONVENTION {currentYear}
                     </Typography>
                     <Typography variant="h6" sx={{ marginBottom: 3 }}>
-                      Inviting the BEST of the BEST in Philippine Real Estate
+                      Inviting the BEST of the BEST in Philippine Real Estate{" "}
                       {currentYear} into ONE GRAND NATIONAL CONVENTION
                     </Typography>
                     <Divider sx={{ my: 2 }} />
@@ -767,26 +777,36 @@ const Registration = () => {
                       About NATCON {currentYear}
                     </Typography>
                     <Typography paragraph sx={{ marginBottom: 3 }}>
-                      A 2-Day grand gathering of Filipino Homes awardees from
+                      A 2-day grand gathering of Filipino Homes awardees from
                       Luzon, Visayas, and Mindanao <br /> to be held at{" "}
-                      <b>NUSTAR Resort & Casino Cebu.</b>
+                      <b>Waterfront Hotel & Casino, Lahug, Cebu City.</b>
                       <br />
                       <br />
-                      <b>DAY 1 - October 19, {currentYear}</b>(Sunday)
-                      Conference and Welcome Party. Doors will open at{" "}
+                      <b>DAY 1 - October 19, {currentYear}</b> (Sunday)
+                      Conference and Welcome Party. Registration starts at{" "}
                       <b>10:30 A.M.</b> (Please take your early lunch). <br />
                       <b>ATTIRE:</b> FH Polo Shirt (To be provided)
-                      <br />
-                      <br />
-                      <b>DAY 2 - October 20, {currentYear}</b>(Monday) National
-                      Awards Night. The Pictorial Starts at <b>10:30 A.M.</b>
-                      <br />
-                      <b>ATTIRE:</b> <br />
-                      MEN - Formal Barong <br />
-                      WOMEN - Formal Filipiniana (If with Mestiza / Butterfly
-                      sleeves, should be on both shoulders).
-                      <br />
                     </Typography>
+                    <Typography paragraph>
+                      <b>DAY 2 - October 20, {currentYear}</b> (Monday) National
+                      Awards Night. The pictorial starts at <b>10:30 A.M.</b>
+                      <br />
+                      <b>ATTIRE (Strictly Formal):</b> <br />
+                      WOMEN - Modern Gown
+                      <br /> MEN - Modern Suit and Tie <br />
+                      COLORS:
+                    </Typography>
+                    <Box display="flex" gap={1} mb={5}>
+                      {attireColors.map((c) => (
+                        <Box
+                          height={30}
+                          width={30}
+                          bgcolor={`${c}.main`}
+                          borderRadius={5}
+                          border="1px solid #ccc"
+                        />
+                      ))}
+                    </Box>
                     <Typography
                       variant="body2"
                       color="error"

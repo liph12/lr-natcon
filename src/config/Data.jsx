@@ -34,6 +34,7 @@ export const teams = [
   "LR Direct 2",
   "LR Patriots",
   "Team Champions",
+  "Team Grateful",
   "Royalties",
   "Team Tycoons",
   "Luzon Leaders",

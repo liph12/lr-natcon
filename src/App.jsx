@@ -41,6 +41,9 @@ function App() {
       warning: {
         main: "#cb9f00",
       },
+      yellow: {
+        main: "#fcce00",
+      },
       lightWarning: {},
     },
   });

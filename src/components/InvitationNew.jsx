@@ -156,7 +156,7 @@ const InvitationNew = ({ awardee, setCanvas }) => {
       }
 
       // Draw 'VIP | TOP AGENT' below the name (dynamic y)
-      const subtitleText = subtitle || "VIP | TOP AGENT";
+      const subtitleText = subtitle || "VIP | Top Agent";
       context.font = `bold 90px 'Times New Roman', Times, serif`;
       context.shadowColor = "rgba(0,0,0,0.4)";
       context.shadowOffsetX = 4;

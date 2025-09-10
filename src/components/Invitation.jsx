@@ -8,6 +8,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import NATCONBackGround from "../assets/images/natcon_rect_bg.jpg";
@@ -72,6 +73,7 @@ const Invitation = () => {
         firstName: q.firstName,
         lastName: q.lastName,
         fullName: fullName,
+        subtitle: q.subtitle,
         email: q.email,
         onUpdate: false,
       };
@@ -210,12 +212,42 @@ const Invitation = () => {
     }
   };
 
+  const handleGenerateAll = () => {
+    let currentIndex = 0;
+
+    const t = setInterval(() => {
+      if (currentIndex < data.length - 1) {
+        const current = rows[currentIndex];
+
+        currentIndex++;
+        setAwardee(current);
+      } else {
+        clearInterval(t);
+      }
+    }, 1000);
+  };
+
   useEffect(() => {
     if (canvasData === null) {
       initQualifiers();
     }
+  }, []);
 
-    if (awardee !== null) {
+  useEffect(() => {
+    const downloadCanvas = () => {
+      const { lastName, firstName } = awardee;
+      const dataURL = canvasData.toDataURL("image/jpeg", 0.8);
+      const link = document.createElement("a");
+      link.download = `${lastName} ${firstName} Invitation.jpg`;
+      link.href = dataURL;
+      link.click();
+
+      setAwardee(null);
+      setCanvasData(null);
+    };
+
+    if (awardee !== null && canvasData !== null) {
+      // downloadCanvas();
       uploadCanvasImage();
     }
   }, [canvasData]);
@@ -228,8 +260,9 @@ const Invitation = () => {
             component="img"
             alt="NATON 2024 Background"
             height="auto"
-            image={NATCONBackGround}
+            image={`https://leuteriorealty.com/images/natcon_rect_bg_2025.jpg`}
           />
+          {/* <Button onClick={handleGenerateAll}>Generate All</Button> */}
           <CardContent sx={{ margin: lg ? 3 : 1 }}>
             <Box sx={{ marginBottom: 3 }}>
               <Typography
